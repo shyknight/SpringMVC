@@ -139,6 +139,68 @@
 		<property name="prefix" value="test4"></property>
 	</bean>
 
+	<!--UserService 用户服务类，实现业务逻辑 -->
+	<bean id="userService" class="com.shy.service.UserService" />
 
-<bean id="userService" class="com.shy.service.UserService" />
+	<!-- 依赖注入 -->
+	<bean name="/user/**" class="com.shy.web.controller.UserController">
+		<property name="userService" ref="userService" />
+		<property name="createView" value="user/create" />
+		<property name="updateView" value="user/update" />
+		<property name="deleteView" value="user/delete" />
+		<property name="listView" value="user/list" />
+		<property name="redirectToListView" value="redirect:/user/list" />
+		<!-- 使用PropertiesMethodNameResolver来解析功能处理方法名 -->
+		<!--property name="methodNameResolver" ref="propertiesMethodNameResolver"/ -->
+	</bean>
+
+
+
+	<!-- 委托方式实现 -->
+	<bean id="userDelegate" class="com.shy.web.controller.UserDelegate">
+		<property name="userService" ref="userService" />
+		<property name="createView" value="user/create" />
+		<property name="updateView" value="user/update" />
+		<property name="deleteView" value="user/delete" />
+		<property name="listView" value="user/list" />
+		<property name="redirectToListView" value="redirect:/user/list" />
+	</bean>
+
+	<!-- 控制器对象 -->
+	<bean name="/user2/**"
+		class="org.springframework.web.servlet.mvc.multiaction.MultiActionController">
+		<property name="delegate" ref="userDelegate" />
+		<property name="methodNameResolver" ref="parameterMethodNameResolver" />
+	</bean>
+
+	<bean id="parameterMethodNameResolver"
+		class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+		<!-- 1、根据请求参数名解析功能方法名 -->
+		<property name="methodParamNames" value="create,update,delete" />
+		<!-- 2、根据请求参数名的值解析功能方法名 -->
+		<property name="paramName" value="action" />
+		<property name="logicalMappings">
+			<props>
+				<prop key="doList">list</prop>
+			</props>
+		</property>
+		<!-- 3、默认执行的功能处理方法 -->
+		<property name="defaultMethodName" value="list" />
+	</bean>
+
+
+	<bean name="/databind" class="com.shy.web.controller.DataBinderTestController" />
+
+
+
+
+
+
+
+
+
+
+
+
+
 </beans>
