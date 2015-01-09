@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- HandlerMapping -->
+	<bean
+		class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
+
+	<!-- HandlerAdapter -->
+	<bean
+		class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
+
+	<!-- ViewResolver -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<!-- 处理器 -->
+	<bean name="/hello" class="com.shy.web.controller.HelloWorldController" />
+
+	<!-- 处理器 -->
+	<bean name="/hello2" class="com.shy.web.controller.HelloWorld2Controller" />
+
+	<!-- 处理器 -->
+	<bean name="/hellowithout"
+		class="com.shy.web.controller.HelloWorldWithoutReturnModelAndViewController" />
+
+	<!-- 处理器 -->
+	<bean name="/hellowithpost" class="com.shy.web.controller.HelloWorldWithPOST">
+		<property name="supportedMethods" value="POST"></property>
+	</bean>
+
+	<!-- 处理器 -->
+	<bean name="/hellorequiresession" class="com.shy.web.controller.HelloWorldWithSession">
+		<property name="requireSession" value="true"></property>
+	</bean>
+
+	<!-- 处理器 -->
+	<bean name="/hellocache" class="com.shy.web.controller.HelloWorldCacheController">
+		<property name="cacheSeconds" value="5"></property>
+	</bean>
+
+	<!-- 处理器 -->
+	<bean name="/hellonocache" class="com.shy.web.controller.HelloWorldNoCacheController">
+		<property name="cacheSeconds" value="0"></property>
+	</bean>
+
+	<!-- 处理器 -->
+	<bean name="/hellolastmodified"
+		class="com.shy.web.controller.HelloWorldLastModifiedCacheController" />
+
+	<!-- 处理器 -->
+	<bean name="/forwardtoservlet"
+		class="org.springframework.web.servlet.mvc.ServletForwardingController">
+		<property name="servletName" value="forwarding"></property>
+	</bean>
+
+	<!-- 处理器 -->
+	<bean name="/abstractcommand" class="com.shy.web.controller.MyAbstractCommandController">
+		<!-- 也可以通过依赖注入 注入命令实现类 -->
+		<!-- property name="commandClass" value="com.shy.model.UserModel" -->
+	</bean>
+
+	<!-- 处理器 -->
+	<bean name="/simpleform" class="com.shy.web.controller.RegisterSimpleFormController">
+		<property name="formView" value="register" />
+		<property name="successView" value="redirect:/success" />
+	</bean>
+
+	<!-- 处理器 -->
+	<bean name="/oncancelform"
+		class="com.shy.web.controller.CanCancelRegisterSimpleFormController">
+		<property name="formView" value="register" />
+		<property name="successView" value="redirect:/success" />
+		<property name="cancelParamKey" value="_cancel" />
+		<property name="cancelView" value="redirect:/cancel" />
+	</bean>
+	<!-- 处理器 -->
+	<bean name="/success" class="com.shy.web.controller.SuccessController" />
+	<!-- 处理器 -->
+	<bean name="/cancel" class="com.shy.web.controller.CancelController" />
+
+	<!-- 处理器 -->
+	<bean name="/infofillwizard" class="com.shy.web.controller.InfoFillWizardFormController">
+		<property name="pages">
+			<list>
+				<value>wizard/baseInfo</value>
+				<value>wizard/schoolInfo</value>
+				<value>wizard/workInfo</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 处理器 -->
+	<bean name="/parameterizableView"
+		class="org.springframework.web.servlet.mvc.ParameterizableViewController">
+		<property name="viewName" value="success" />
+	</bean>
+
+
+	<!-- 处理器 -->
+	<bean name="/index?"
+		class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />
+	<bean name="/index1/*"
+		class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />
+	<bean name="/index2/**"
+		class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />
+	<bean name="/*.html"
+		class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />
+	<bean name="/index3/*.html"
+		class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />
+	<bean name="/*.htm"
+		class="org.springframework.web.servlet.mvc.UrlFilenameViewController">
+		<property name="prefix" value="test" />
+		<property name="suffix" value="test" />
+	</bean>
+
+	<!-- 处理器 -->
+	<bean name="/long/long"
+		class="org.springframework.web.servlet.mvc.UrlFilenameViewController">
+		<property name="prefix" value="test1"></property>
+	</bean>
+	<bean name="/long/**/abc"
+		class="org.springframework.web.servlet.mvc.UrlFilenameViewController">
+		<property name="prefix" value="test2" />
+	</bean>
+	<bean name="/long/**"
+		class="org.springframework.web.servlet.mvc.UrlFilenameViewController">
+		<property name="prefix" value="test3" />
+	</bean>
+	<bean name="/**"
+		class="org.springframework.web.servlet.mvc.UrlFilenameViewController">
+		<property name="prefix" value="test4"></property>
+	</bean>
+
+
+<bean id="userService" class="com.shy.service.UserService" />
+</beans>
