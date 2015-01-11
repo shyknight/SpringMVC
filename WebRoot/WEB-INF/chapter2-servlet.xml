@@ -189,16 +189,37 @@
 	</bean>
 
 
-	<bean name="/databind" class="com.shy.web.controller.DataBinderTestController" />
+
+	<!-- 注册WebBindingInitializer实现 -->
+	<bean id="myWebBindingInitializer"
+		class="com.shy.web.controller.support.initializer.MyWebBindingInitializer" />
+	<bean name="/dataBind" class="com.shy.web.controller.DataBinderTestController">
+		<!-- 注入WebBindingInitializer实现 -->
+		<!-- <property name="webBindingInitializer" ref="myWebBindingInitializer"/> -->
+	</bean>
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="classpath:messages" />
+		<property name="fileEncodings" value="utf-8" />
+		<property name="cacheSeconds" value="120" />
+	</bean>
+
+	<bean name="/error" class="com.shy.web.controller.ErrorController" />
+
+	<bean name="/dataBindError" class="com.shy.web.controller.DataBinderErrorTestController">
+		<property name="formView" value="bindAndValidate/input" />
+		<property name="successView" value="bindAndValidate/success" />
+	</bean>
 
 
-
-
-
-
-
-
-
+	<bean id="userModelValidator"
+		class="com.shy.web.controller.support.validator.UserModelValidator" />
+	<bean name="/validator" class="com.shy.web.controller.RegisterSimpleFormController">
+		<property name="formView" value="registerAndValidator" />
+		<property name="successView" value="redirect:/success" />
+		<property name="validator" ref="userModelValidator" />
+	</bean>
 
 
 
