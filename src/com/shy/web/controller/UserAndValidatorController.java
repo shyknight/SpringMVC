@@ -3,6 +3,8 @@ package com.shy.web.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
@@ -18,18 +20,28 @@ public class UserAndValidatorController extends MultiActionController
 	private String listView;
 	private String redirectToListView;
 
-	public String create(HttpServletRequest request,
+	public ModelAndView create(HttpServletRequest request,
 			HttpServletResponse response, UserModel user)
 	{
 		if ("GET".equals(request.getMethod()))
 		{
 			// 如果是get请求 我们转向 新增页面
-			return getCreateView();
+			return new ModelAndView(getCreateView());
 		}
-
+		BindException errors = new BindException(user, getCommandName(user));
+		// 如果用户名为空
+		if (!StringUtils.hasLength(user.getUsername()))
+		{
+			errors.rejectValue("username", "username.not.empty");
+		}
+		if (errors.hasErrors())
+		{
+			return new ModelAndView(getCreateView()).addAllObjects(errors
+					.getModel());
+		}
 		userService.create(user);
 		// 直接重定向到列表页面
-		return getRedirectToListView();
+		return new ModelAndView(getRedirectToListView());
 	}
 
 	public ModelAndView update(HttpServletRequest request,

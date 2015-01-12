@@ -218,10 +218,25 @@
 	<bean name="/validator" class="com.shy.web.controller.RegisterSimpleFormController">
 		<property name="formView" value="registerAndValidator" />
 		<property name="successView" value="redirect:/success" />
-		<property name="validator" ref="userModelValidator" />
+	<property name="validator" ref="userModelValidator" />
 	</bean>
 
+	<bean class="com.shy.web.controller.UserAndValidatorController"
+		name="/userAndValidator/**">
 
+		<property name="userService" ref="userService" />
+
+		<property value="user/createAndValidator" name="createView" />
+
+		<property value="user/update" name="updateView" />
+
+		<property value="user/delete" name="deleteView" />
+
+		<property value="user/list" name="listView" />
+
+		<property value="redirect:/user/list" name="redirectToListView" />
+
+	</bean>
 
 
 </beans>
